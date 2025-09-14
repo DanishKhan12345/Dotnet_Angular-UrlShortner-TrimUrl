@@ -1,4 +1,10 @@
+using Carter;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using TrimUrlApi.Persistence.Context;
+using TrimUrlApi.Persistence.Interface;
+using TrimUrlApi.Persistence.Repository;
+using TrimUrlApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +13,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddDbContext<TrimUrlDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IUrlRepository,UrlRepository>();
+builder.Services.AddScoped<IAnalyticsRepository,AnalyticsRepository>();
+builder.Services.AddScoped<UrlService>();
+builder.Services.AddScoped<AnalyticsService>();
+builder.Services.AddCarter();
 
 var app = builder.Build();
 
@@ -24,6 +38,8 @@ if (app.Environment.IsDevelopment())
 app.UseRouting();
 
 app.UseHttpsRedirection();
+
+app.MapCarter();
 
 app.UseAuthorization();
 
