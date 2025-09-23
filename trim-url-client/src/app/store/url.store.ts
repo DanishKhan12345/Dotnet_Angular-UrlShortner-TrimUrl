@@ -29,7 +29,7 @@ export const UrlStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withComputed(({ pagedUrls, loading, error }) => ({
-    hasUrls: computed(() => pagedUrls()!.data?.length > 0),
+    hasUrls: computed(() => !!pagedUrls()?.items?.length),
     totalUrls: computed(() => pagedUrls()?.totalCount || 0),
     isLoading: computed(() => loading()),
     hasError: computed(() => !!error()),
@@ -62,7 +62,10 @@ export const UrlStore = signalStore(
 
       loadPagedUrls: rxMethod<void>(
         pipe(
-          tap(() => patchState(store, { loading: true, error: null })),
+          tap((pagedUrls) => {
+            console.log('Paged URLs from API:', pagedUrls);
+            patchState(store, { loading: true, error: null });
+          }),
           switchMap(() =>
             urlService.getPagedUrls(
               store.pageIndex(),

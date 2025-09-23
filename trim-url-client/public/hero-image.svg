@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200px" height="900px" viewBox="0 0 800 600" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="purpleGradient">
+            <stop stop-color="#6D28D9" offset="0%"></stop>
+            <stop stop-color="#4F46E5" offset="100%"></stop>
+        </linearGradient>
+        <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%" filterUnits="objectBoundingBox">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>
+            <feOffset in="blur" dx="0" dy="4" result="offsetBlur"/>
+            <feFlood flood-color="#000000" flood-opacity="0.1" result="offsetColor"/>
+            <feComposite in="offsetColor" in2="offsetBlur" operator="in" result="offsetBlur"/>
+            <feMerge>
+                <feMergeNode in="offsetBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+    </defs>
+
+    <g id="TrimUrl-Hero" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="none" x="0" y="0" width="800" height="600"></rect>
+        <g transform="translate(150, 150)" filter="url(#shadow)">
+            <rect fill="white" x="0" y="0" width="500" height="300" rx="12"></rect>
+            <g transform="translate(50, 80)">
+                <rect fill="#F8FAFC" x="0" y="0" width="400" height="50" rx="8" stroke="#E2E8F0" stroke-width="1"></rect>
+                <text font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#64748B">
+                    <tspan x="20" y="30">https://example.com/very/long/path?param=value</tspan>
+                </text>
+                <g transform="translate(-30, 25)">
+                    <circle fill="#4F46E5" cx="0" cy="0" r="15"></circle>
+                    <path d="M-5,-2 L5,-2 M-5,2 L5,2" stroke="white" stroke-width="1.5" stroke-linecap="round"></path>
+                </g>
+            </g>
+            <g transform="translate(250, 150)">
+                <path d="M0,0 L0,20" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"></path>
+                <path d="M-6,14 L0,20 L6,14" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </g>
+
+            <g transform="translate(150, 190)">
+                <rect fill="#EEF2FF" x="0" y="0" width="200" height="50" rx="8" stroke="#4F46E5" stroke-width="1"></rect>
+                <text font-family="Arial, sans-serif" font-size="16" font-weight="600" fill="#4F46E5">
+                    <tspan x="40" y="30">trim.url/a1b2c3</tspan>
+                </text>
+
+                <g transform="translate(-30, 25)">
+                    <circle fill="#6D28D9" cx="0" cy="0" r="15"></circle>
+                    <text font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="white">
+                        <tspan x="-5" y="4">T</tspan>
+                    </text>
+                </g>
+            </g>
+
+            <g transform="translate(400, 215)">
+                <circle fill="#4F46E5" cx="0" cy="0" r="15"></circle>
+                <path d="M-5,-5 L5,-5 L5,5 L-5,5 Z M-2,-5 L-2,-8 L8,-8 L8,2 L5,2" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </g>
+        </g>
+
+        <circle fill="#EEF2FF" opacity="0.5" cx="650" cy="150" r="100"></circle>
+        <circle fill="#EEF2FF" opacity="0.3" cx="150" cy="450" r="80"></circle>
+    </g>
+</svg>

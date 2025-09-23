@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { UrlDto, UrlRequest, UrlResponse, PagedUrlsResponse, AnalyticsResponse } from '../models/url.model';
 import { environment } from '../../environments/environment';
 
@@ -45,7 +45,12 @@ export class UrlService {
       params = params.set('searchTerm', searchTerm);
     }
     
-    return this.http.get<PagedUrlsResponse>(`${this.apiUrl}/paged-urls`, { params });
+    //return this.http.get<PagedUrlsResponse>(`${this.apiUrl}/paged-urls`, { params });
+    return this.http.get<PagedUrlsResponse>(`${this.apiUrl}/paged-urls`, { params }).pipe(
+      tap(res => console.log('API response:', res))
+    );
+    
+    
   }
 
   /**

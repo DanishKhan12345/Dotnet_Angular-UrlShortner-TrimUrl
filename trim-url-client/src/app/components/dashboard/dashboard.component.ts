@@ -49,7 +49,7 @@ export class DashboardComponent {
       .getPagedUrls(this.pageIndex(), this.pageSize(), this.searchTerm())
       .subscribe({
         next: (res) => {
-          this.urls.set(res.data);
+          this.urls.set(res.items);
           this.totalCount.set(res.totalCount);
           this.loading.set(false);
         },

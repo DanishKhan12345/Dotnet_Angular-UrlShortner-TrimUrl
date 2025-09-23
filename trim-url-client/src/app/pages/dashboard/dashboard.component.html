@@ -18,7 +18,7 @@
   <app-error [errorMessage]="urlStore.error()" (clearError)="urlStore.clearError()"></app-error>
 
   <!-- URLs Table -->
-  <div *ngIf="!urlStore.isLoading() && urlStore.pagedUrls()?.data?.length">
+  <div *ngIf="!urlStore.isLoading() && urlStore.pagedUrls()?.items?.length">
     <div class="overflow-hidden mb-6 bg-white rounded-lg shadow-md">
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
@@ -32,7 +32,7 @@
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-            <tr *ngFor="let url of urlStore.pagedUrls()?.data" class="hover:bg-gray-50">
+            <tr *ngFor="let url of urlStore.pagedUrls()?.items" class="hover:bg-gray-50">
               <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{{ url.id }}</td>
               <td class="px-6 py-4 max-w-xs text-sm text-gray-900 truncate whitespace-nowrap" title="{{ url.longUrl }}">
                 {{ url.longUrl }}

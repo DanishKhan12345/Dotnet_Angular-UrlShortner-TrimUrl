@@ -17,7 +17,7 @@ export interface UrlDto {
 }
 
 export interface PagedUrlsResponse {
-  data: UrlDto[];
+  items: UrlDto[];
   totalCount: number;
   pageIndex: number;
   pageSize: number;
