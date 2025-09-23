@@ -1,18 +1,29 @@
+export interface UrlRequest {
+  longUrl: string;
+}
+
+export interface UrlResponse {
+  isSuccess: boolean;
+  statusCode: number;
+  shortUrl: string | null;
+  errorMessage: string | null;
+}
+
 export interface UrlDto {
   id: number;
   longUrl: string;
   shortUrl: string;
-  createdAt: string; // ISO string from backend
+  createdAt: string;
 }
 
-export interface PagedResult<T> {
+export interface PagedUrlsResponse {
+  data: UrlDto[];
+  totalCount: number;
   pageIndex: number;
   pageSize: number;
-  totalCount: number;
   totalPages: number;
-  hasPreviousPage: boolean;
-  hasNextPage: boolean;
-  items: T[];
 }
 
-
+export interface AnalyticsResponse {
+  totalClicks: number;
+}

@@ -1,0 +1,94 @@
+<!-- Hero Section -->
+<section class="text-white bg-gradient-to-r from-indigo-600 to-purple-600">
+  <div class="container px-4 py-20 mx-auto">
+    <div class="flex flex-col items-center md:flex-row">
+      <div class="mb-10 md:w-1/2 md:mb-0">
+        <h1 class="mb-4 text-4xl font-bold md:text-5xl">TrimUrl</h1>
+        <p class="mb-8 text-xl">Simplify your links, amplify your reach. Create short URLs in seconds.</p>
+
+        <!-- URL Shortening Form -->
+        <form [formGroup]="urlForm" (ngSubmit)="onSubmit()" class="w-full max-w-md">
+          <div class="flex flex-col space-y-4 h-12 sm:space-y-0 sm:flex-row sm:space-x-4">
+            <div class="relative flex-grow">
+              <input
+                type="url"
+                formControlName="longUrl"
+                placeholder="Enter your long URL here"
+                class="px-4 py-3 w-full text-gray-700 rounded-lg border border-transparent bg-white/90 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                [ngClass]="{'border-red-500': urlForm.get('longUrl')?.invalid && urlForm.get('longUrl')?.touched}"
+              >
+              @if (urlForm.get('longUrl')?.invalid && urlForm.get('longUrl')?.touched) {
+                <div class="mt-1 text-sm text-red-300">
+                  @if (urlForm.get('longUrl')?.errors?.['required']) {
+                    <span>URL is required</span>
+                  } @else if (urlForm.get('longUrl')?.errors?.['pattern']) {
+                    <span>Please enter a valid URL starting with http:// or https://</span>
+                  }
+                </div>
+              }
+            </div>
+            <button
+              type="submit"
+              class="px-6 py-3 font-semibold text-white bg-indigo-800 rounded-lg transition duration-300 ease-in-out hover:bg-indigo-700 whitespace-nowrap flex-shrink-0 min-w-[120px] flex justify-center items-center"
+              [disabled]="urlForm.invalid || urlStore.isLoading()"
+            >
+              @if (urlStore.isLoading()) {
+                <span class="flex justify-center items-center">
+                  <svg class="mr-2 -ml-1 w-4 h-4 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Trimming...
+                </span>
+              } @else {
+                <span>Trim URL</span>
+              }
+            </button>
+          </div>
+        </form>
+
+        <!-- Result Section -->
+        @if (urlStore.currentUrl()) {
+          <div class="p-4 mt-6 rounded-lg backdrop-blur-sm bg-white/10">
+            <h3 class="mb-2 text-lg font-semibold">Your shortened URL:</h3>
+            <div class="flex items-center">
+              <input
+                type="text"
+                [value]="urlStore.currentUrl()?.shortUrl || ''"
+                readonly
+                class="flex-grow px-3 py-2 text-white rounded-l-lg bg-white/20 focus:outline-none"
+              >
+              <button
+                [cdkCopyToClipboard]="urlStore.currentUrl()?.shortUrl || ''"
+                (click)="copyToClipboard()"
+                class="px-4 py-2 bg-indigo-800 rounded-r-lg transition duration-300 ease-in-out hover:bg-indigo-700"
+              >
+                @if (copied()) {
+                  <span>Copied!</span>
+                } @else {
+                  <span>Copy</span>
+                }
+              </button>
+            </div>
+          </div>
+        }
+
+        <!-- Error Message -->
+        <app-error [errorMessage]="urlStore.error()" (clearError)="urlStore.clearError()" />
+      </div>
+
+      <!-- Hero Image -->
+      <div class="flex justify-center md:w-1/2">
+        <img
+          src="/hero-image.svg"
+          alt="URL Shortening Illustration"
+          class="w-full max-w-[300px] md:max-w-full h-auto object-contain"
+        >
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-features />
+<app-cta />
+<app-footer [currentYear]="currentYear" />

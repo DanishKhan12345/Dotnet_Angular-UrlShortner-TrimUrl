@@ -22,7 +22,28 @@ builder.Services.AddScoped<UrlService>();
 builder.Services.AddScoped<AnalyticsService>();
 builder.Services.AddCarter();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            builder
+                .WithOrigins("http://localhost:4200")
+                //.WithOrigins("https://trimurl.in", "https://www.trimurl.in", "http://localhost:4200")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()
+                .SetIsOriginAllowed((host) =>
+                {
+                    Console.WriteLine($"CORS Origin Check: {host}");
+                    return true;
+                });
+        });
+});
+
 var app = builder.Build();
+
+app.UseCors("AllowSpecificOrigin");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
