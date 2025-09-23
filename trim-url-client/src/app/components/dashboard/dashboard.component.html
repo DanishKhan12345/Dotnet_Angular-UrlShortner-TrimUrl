@@ -1,0 +1,102 @@
+<div class="min-h-screen bg-gray-50">
+  <header class="bg-white border-b">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 text-white font-bold">T</span>
+        <h1 class="text-xl font-semibold tracking-tight">TrimURL</h1>
+      </div>
+      <div class="text-sm text-gray-500">Dashboard</div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-6">
+    <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+      <h2 class="text-2xl font-semibold">{{ heading }}</h2>
+      <div class="sm:ml-auto flex w-full sm:w-auto items-center gap-2">
+        <div class="relative flex-1 sm:w-[420px]">
+          <input
+            type="text"
+            placeholder="Search long URLs…"
+            class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 pl-9 text-sm shadow-sm focus:border-indigo-500 focus:outline-none"
+            [ngModel]="searchTerm()"
+            (ngModelChange)="onSearch($event)"
+          />
+          <span class="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">🔎</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="text-xs text-gray-600">Page</label>
+          <select class="rounded-md border border-gray-300 bg-white px-2 py-2 text-sm shadow-sm focus:border-indigo-500" [ngModel]="pageSize()" (ngModelChange)="onPageSizeChange($event)">
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="overflow-hidden rounded-lg border bg-white shadow-sm" *ngIf="!loading(); else loadingTpl">
+      <table class="min-w-full">
+        <thead class="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
+          <tr>
+            <th class="text-left px-4 py-3">Id</th>
+            <th class="text-left px-4 py-3">Original URL</th>
+            <th class="text-left px-4 py-3">Short URL</th>
+            <th class="text-left px-4 py-3">Created</th>
+            <th class="text-left px-4 py-3">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          @for (u of urls(); track u.id) {
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-3 text-sm text-gray-700">{{ u.id }}</td>
+              <td class="px-4 py-3 max-w-xl">
+                <a class="text-indigo-600 hover:underline break-all line-clamp-1" [href]="u.longUrl" target="_blank" rel="noopener">{{ u.longUrl }}</a>
+              </td>
+              <td class="px-4 py-3">
+                <a class="text-indigo-600 hover:underline" [href]="u.shortUrl" target="_blank" rel="noopener">{{ u.shortUrl }}</a>
+              </td>
+              <td class="px-4 py-3 text-sm text-gray-700">{{ u.createdAt | date:'medium' }}</td>
+              <td class="px-4 py-3">
+                <div class="flex flex-wrap items-center gap-2">
+                  <button class="inline-flex items-center gap-1 rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm shadow-sm hover:bg-gray-50"
+                          (click)="copyToClipboard(u.shortUrl)">
+                    <span>Copy</span>
+                  </button>
+                  <a class="inline-flex items-center gap-1 rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm shadow-sm hover:bg-gray-50"
+                     [href]="u.shortUrl" target="_blank" rel="noopener">Open</a>
+                </div>
+              </td>
+            </tr>
+          }
+          @empty {
+            <tr>
+              <td colspan="5" class="px-4 py-8 text-center text-sm text-gray-500">No URLs found.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #loadingTpl>
+      <div class="rounded-lg border bg-white p-6 text-center text-gray-600 shadow-sm">Loading…</div>
+    </ng-template>
+
+    <div class="mt-4 flex items-center gap-3">
+      <button class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm disabled:opacity-50" (click)="prevPage()" [disabled]="pageIndex() === 1">Previous</button>
+      <span class="text-sm text-gray-600">Page {{ pageIndex() }} of {{ totalPages() }}</span>
+      <button class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm disabled:opacity-50" (click)="nextPage()" [disabled]="pageIndex() >= totalPages()">Next</button>
+    </div>
+
+    <div *ngIf="errorMessage()" class="mt-3 rounded-md border border-red-200 bg-red-50 p-3 text-red-700">
+      {{ errorMessage() }}
+    </div>
+  </main>
+
+  <!-- toast placeholder -->
+  <div id="toast-root" class="fixed inset-x-0 bottom-4 flex justify-center pointer-events-none">
+    <div *ngIf="toastMessage" class="pointer-events-auto rounded-md bg-gray-900/90 text-white px-4 py-2 shadow-lg text-sm">
+      {{ toastMessage }}
+    </div>
+  </div>
+</div>
