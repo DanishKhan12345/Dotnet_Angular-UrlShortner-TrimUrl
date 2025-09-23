@@ -27,6 +27,12 @@ namespace TrimUrlApi.Modules
                 var urls = await urlservice.GetAllUrlsAsync();
                 return Results.Ok(urls);
             });
+
+            app.MapGet("/paged-urls", async ([FromQuery] int pageIndex, [FromQuery] int pageSize, [FromQuery] string? searchTerm, UrlService? urlservice) =>
+            {
+                var urls = await urlservice.GetPagedUrlsAsync(pageIndex,pageSize,searchTerm);
+                return Results.Ok(urls);
+            });
         }
     }
 }

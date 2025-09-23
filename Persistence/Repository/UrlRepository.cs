@@ -36,5 +36,26 @@ namespace TrimUrlApi.Persistence.Repository
         {
             return await _context.Urls.ToListAsync();
         }
+
+        public async Task<PagedResult<Url>> GetPagedUrlAsync(int pageIndex, int pageSize, string? searchTerm)
+        {
+            var query = _context.Urls.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            { 
+                query = query.Where(u => u.LongUrl.Contains(searchTerm.ToLower()) || u.UrlCode.Contains(searchTerm.ToLower()));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .OrderByDescending(u => u.CreatedAt)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PagedResult<Url>()
+            { PageIndex = pageIndex, PageSize = pageSize, TotalCount = totalCount, Items = items };
+        }
     }
 }

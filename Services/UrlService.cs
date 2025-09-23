@@ -112,5 +112,17 @@ namespace TrimUrlApi.Services
             return url;
         }
 
+        public async Task<PagedResult<UrlDto>> GetPagedUrlsAsync(int pageIndex, int pageSize, string? searchTerm)
+        {
+            var pagedResponse =  await _urlRepository.GetPagedUrlAsync(pageIndex, pageSize, searchTerm);
+
+            return new PagedResult<UrlDto>
+            {
+                PageIndex = pagedResponse.PageIndex,
+                PageSize = pagedResponse.PageSize,
+                TotalCount = pagedResponse.TotalCount,
+                Items = pagedResponse.Items.Select(u => new UrlDto(u.Id, u.LongUrl, $"{_config["BaseUrl"]}/{u.UrlCode}", u.CreatedAt)).ToList()
+            };
+        }
     }
 }
